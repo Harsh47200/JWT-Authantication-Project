@@ -772,7 +772,7 @@
         var password = document.getElementById('passwordID').value;
 
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:8080/auth/login', true);
+        xhr.open('POST', 'http://localhost:8081/auth/login', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
 
         xhr.onload = function() {
