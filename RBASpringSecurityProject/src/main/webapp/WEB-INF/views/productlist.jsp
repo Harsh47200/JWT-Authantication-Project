@@ -15,6 +15,7 @@
 	<style>
         body {
             font-family: 'Poppins', sans-serif;
+			background-color: #f0f0f0;
         }
         .custom-header {
             background: linear-gradient(135deg, #4158D0, #C850C0, #FFCC70);
@@ -58,9 +59,7 @@
 		.btn-success {
 		    background-color: #28a745;
 		    border: none;
-		    position: fixed;  /* Use fixed positioning */
-		    top: 174px;     /* Distance from the bottom of the viewport */
-		    right: 295px;      /* Distance from the right of the viewport */
+			margin-left: 852px;
 		    height: 39px;
 		    width: 113px;
 		    z-index: 1000;    /* Ensure the button is above other content */
@@ -186,71 +185,148 @@
 					  80% { color: #1e90ff; }  /* Dodger Blue */
 					  100% { color: #ff007f; } /* Back to Pink */
 					}
+					.bt {
+					    padding: 10px;
+					    margin: 5px;
+					    border: 1px solid #ccc;
+					    background-color: #f8f8f8;
+					    cursor: pointer;
+					}
+
+					.btn.active {
+					    background-color: #007bff;
+					    color: white;
+					}
 
     </style>
 	<!--CSS End-->
 </head>
 <script type="text/javascript">
-function pageloaded()
-{
-	getAllProducts();	
-}
-function getAllProducts() {
-	let httpRequest = new XMLHttpRequest();
-	httpRequest.open("GET","http://localhost:8081/allProducts",true);
-	httpRequest.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem("jwtToken"));
-	httpRequest.send();
-	httpRequest.onload=function()
-	{
-		
-		 if (httpRequest.status >= 200 && httpRequest.status < 300) {
-             let products = JSON.parse(httpRequest.responseText); 
-             if(products.length > 0)
-             {
-            	 displayProducts(products); 
-             }
-             else
-             {
-            	 var productTable = document.getElementById('productTable');
-            	 productTable.innerHTML = ''; 
-            	 var row = productTable.insertRow();
-           		 var cell = row.insertCell(0);
-            	 cell.colSpan = 5;
-            	 cell.style.textAlign = 'center';
-            	 cell.innerText = "No Record Found";
-             }	 
-             
-         } else {
-             console.error('Request failed with status:', httpRequest.status);
-         }
-	}
+	      
 
+let currentPage = 0;  // Global variable to track the current page
+const pageSize = 10;  // Number of records per page
+
+document.addEventListener('DOMContentLoaded', () => {
+    getAllProducts(currentPage); // Load products when the page is loaded
+});
+
+function getAllProducts(page) {
+    const url = `http://localhost:8081/allProducts?page=${page}&size=${pageSize}`;
+    const token = localStorage.getItem("jwtToken");
+
+    console.log('Fetching URL:', url);
+
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        },
+        cache: 'no-store'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Data received for page', page, ':', data);
+
+        if (data.content && data.content.length > 0) {
+            displayProducts(data.content);
+        } else {
+            displayNoProductsFound();
+        }
+
+        updatePagination(data.currentPage || page, data.totalPages || 1);
+    })
+    .catch(error => {
+        console.error('Error fetching products:', error);
+    });
+}
+
+
+function updatePagination(currentPage, totalPages) {
+    console.log("Updating pagination - Current Page:", currentPage, "Total Pages:", totalPages);
+
+    let paginationControls = document.getElementById('paginationControls');
+    paginationControls.innerHTML = '';
+
+    if (currentPage > 0) {
+        let prevButton = document.createElement('button');
+        prevButton.innerText = 'Previous';
+        prevButton.classList.add('btn');
+        prevButton.onclick = () => {
+            currentPage--;
+            getAllProducts(currentPage);
+        };
+        paginationControls.appendChild(prevButton);
+    }
+
+    for (let i = 0; i < totalPages; i++) {
+        let pageButton = document.createElement('button');
+        pageButton.innerText = i + 1;
+        pageButton.classList.add('btn', 'page-btn');
+        if (i === currentPage) {
+            pageButton.classList.add('active');
+        }
+        pageButton.onclick = () => {
+            currentPage = i;
+            getAllProducts(currentPage);
+        };
+        paginationControls.appendChild(pageButton);
+    }
+
+    if (currentPage < totalPages - 1) {
+        let nextButton = document.createElement('button');
+        nextButton.innerText = 'Next';
+        nextButton.classList.add('btn');
+        nextButton.onclick = () => {
+            currentPage++;
+            getAllProducts(currentPage);
+        };
+        paginationControls.appendChild(nextButton);
+    }
 }
 
 function displayProducts(products) {
-    var productTable = document.getElementById('productTable');
+    let productTable = document.getElementById('productTable');
     productTable.innerHTML = ''; 
     products.forEach(product => {
-        var row = productTable.insertRow();
+        let row = productTable.insertRow();
         row.insertCell(0).innerText = product.productId;
         row.insertCell(1).innerText = product.name;
         row.insertCell(2).innerText = product.description;
 		var priceValue = parseFloat(product.price);  // Parse price as float
-		       if (!isNaN(priceValue)) {  // Check if the price is valid
-		           var formattedPrice = priceValue.toLocaleString('en-IN');  // Format price with commas and Indian Rupee symbol
-		           row.insertCell(3).innerHTML = '₹ ' + formattedPrice;  // Insert formatted price
-		       } else {
-		           row.insertCell(3).innerText = 'Invalid Price';  // Insert error message if price is invalid
-		       }
-		row.insertCell(4).innerHTML = 
-		           '<a href="" onClick="confirmDeleteProduct(' + product.productId + '); return false;">' +
-		           '<i class="fa fa-trash-alt"></i></a> &nbsp; ' +  // Create delete link
-		           '<a href="#" onClick="editProduct(\'' + product.productId + '\', \'' + escapeQuotes(product.name) + '\', \'' + escapeQuotes(product.description) + '\', ' + product.price + '); return false;" class="ml-10">' +
-		           '<i class="fa fa-edit"></i></a>';  // Create edit link
+				       if (!isNaN(priceValue)) {  // Check if the price is valid
+				           var formattedPrice = priceValue.toLocaleString('en-IN');  // Format price with commas and Indian Rupee symbol
+				           row.insertCell(3).innerHTML = '₹ ' + formattedPrice;  // Insert formatted price
+				       } else {
+				           row.insertCell(3).innerText = 'Invalid Price';  // Insert error message if price is invalid
+				       }
+        row.insertCell(4).innerHTML = 
+            '<a href="#" onClick="confirmDeleteProduct(' + product.productId + '); return false;">' +
+            '<i class="fa fa-trash-alt"></i></a> &nbsp; ' +  
+            '<a href="#" onClick="editProduct(\'' + product.productId + '\', \'' + escapeQuotes(product.name) + '\', \'' + escapeQuotes(product.description) + '\', ' + product.price + '); return false;" class="ml-10">' +
+            '<i class="fa fa-edit"></i></a>'; 
     });
 }
-function escapeQuotes(str) 
-{
+
+function displayNoProductsFound() {
+    let productTable = document.getElementById('productTable');
+    productTable.innerHTML = ''; 
+    let row = productTable.insertRow();
+    let cell = row.insertCell(0);
+    cell.colSpan = 5;
+    cell.style.textAlign = 'center';
+    cell.innerText = "No Record Found";
+}
+
+
+
+function escapeQuotes(str) {
     return str.replace(/'/g, "\\'");
 }
 var productIdToDelete = null;  // Variable to store product ID to delete
@@ -314,17 +390,6 @@ function openAddProductModal() {
 
 
 
-//function openAddProductModal() 
-//{
-//	  resetProductForm();
-//	  var myModal = new bootstrap.Modal(document.getElementById('addProductModal'));
-//	  myModal.show();
-//}
-//function openDeleteProductModal() 
-//{
-//		var mydeleteModal = new bootstrap.Modal(document.getElementById('deleteProductModal'));
-//		mydeleteModal.show();
-//}
 var gproductId=0;
 function editProduct(productId,name,description,price)
 {
@@ -395,7 +460,7 @@ function addProduct(event)
 	    var token = localStorage.getItem('jwtToken'); 
 
 	    var xhr = new XMLHttpRequest();
-	    xhr.open('POST', 'http://localhost:8081/products', true);
+	    xhr.open('POST', 'http://localhost:3030/products', true);
 	    xhr.setRequestHeader('Content-Type', 'application/json');
 	    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
 
@@ -446,7 +511,7 @@ function addProduct(event)
 
 </script>
 <!--Body Part Start-->
-<body onload="pageloaded();" style="background-color: #f0f0f0;">
+<body onload="pageloaded();">
 	
 	<!--Header Start-->
     <header class="custom-header">
@@ -484,7 +549,9 @@ function addProduct(event)
     <div class="container text-center mt-4">
        <marquee behavior="scroll" direction="left">  <h1 class="scrolling-text">Welcome To Our ${pageHeading}</h1></marquee>
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <span>Welcome <b>${userName}</b></span>
+            <span>Welcome <b>${userName}</b></span>			<div>
+						                <a href="#" onclick="openAddProductModal();" class="btn btn-success">Add Product</a>
+						            </div>
 			<a style="color: #212529; border-color: #dc3545;" href="${pageContext.request.contextPath}/dashboard-page" class="btn btn-outline-light">Logout</a>
         </div>
         <div class="mt-5">
@@ -502,9 +569,10 @@ function addProduct(event)
                     <!-- Products will be loaded here -->
                 </tbody>
             </table>
-            <div>
-                <a href="#" onclick="openAddProductModal();" class="btn btn-success">Add Product</a>
-            </div>
+		
+			<div id="paginationControls" class="d-flex justify-content-between mt-3">
+			        <!-- Pagination buttons will be dynamically added here -->
+			    </div>
         </div>
     </div>
 	<!--Product List And Role Diplay End-->
