@@ -92,7 +92,7 @@ o	Server-Side:
 	Our Project Url given below:-
 
 1.	http://localhost:8081/dashboard-page
-2.	http://localhost:808q/login-page
+2.	http://localhost:8081/login-page
 3.	http://localhost:8081/register-page
 4.	http://localhost:8081/dashboard?Authorization=ZXlKaGJHY2lPaUpJVXpVeE1pSjkuZXlKemRXSWlPaUp5YjJocGRFQm5iV0ZwYkM1amIyMGlMQ0pwWVhRaU9qRTNNalF6TVRjeU56VXNJbVY0Y0NJNk1UY3lORE15TURnM05YMC44aDRuSzF5MUd4YzhnMlJSazJxQmZ3NHk2bzJHR3V0LWRlZUZId3VUVXVFSkI2aTQyN25jaTJNa0FkYVpaMHd3RE84Ui1BZ0NnT2tWZnNQTUhKWVJwQQ%3D%3D
 
