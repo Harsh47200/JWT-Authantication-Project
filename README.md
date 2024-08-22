@@ -1,6 +1,8 @@
 # JWT-Authantication-Project
 
 1. Authentication and Authorization
+
+   
 1.	User Entity and Repository
 o	Entity: User
 	Fields: id, username, password, role
@@ -23,13 +25,14 @@ o	User Retrieval: Retrieves user information based on username.
 o	Endpoint: POST /auth/login
 	Generate JWT upon successful authentication
 
-
-
 5.	Role-Based Access Control
 o	APIs: Secure endpoints using role-based access
 	Example: Admin routes (POST /products, PUT /products/{id}, DELETE /products/{id})
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 2. Product Management
+   
 1.	Product Entity and Repository
 o	Entity: Product
 	Fields: productId, name, description, price
@@ -48,7 +51,10 @@ o	Controller: ProductController
 	PUT /products/{id} - Update a product (admin)
 	DELETE /products/{id} - Delete a product (admin)
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 3. Front-end Implementation
+   
 1.	Routing and Views
 o	Pages:
 	Register Page: Register Users
@@ -58,18 +64,20 @@ o	Pages:
 	Product Form Page: Add and update products
 	Admin Dashboard: Manage products
 
-
 2.	AJAX/Fetch for API Calls
 o	Examples:
 	Fetch product list
 	Submit product form
 	Handle delete requests
-	
+
 3.	Token Management
 o	Storage: JWT tokens stored in local storage
 o	Headers: Include JWT in request headers for protected APIs
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 4. Validation and Error Handling
+   
 1.	Form Validation
 o	Client-Side: Validate forms using JavaScript or front-end libraries
 o	Server-Side: Validate input data in the controllers and services
@@ -80,11 +88,7 @@ o	Client-Side:
 o	Server-Side:
 	Handle exceptions and return appropriate HTTP status codes and messages
 
-
-
-
-
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Our Project Url given below:-
 
@@ -93,7 +97,10 @@ o	Server-Side:
 3.	http://localhost:8081/register-page
 4.	http://localhost:8081/dashboard?Authorization=ZXlKaGJHY2lPaUpJVXpVeE1pSjkuZXlKemRXSWlPaUp5YjJocGRFQm5iV0ZwYkM1amIyMGlMQ0pwWVhRaU9qRTNNalF6TVRjeU56VXNJbVY0Y0NJNk1UY3lORE15TURnM05YMC44aDRuSzF5MUd4YzhnMlJSazJxQmZ3NHk2bzJHR3V0LWRlZUZId3VUVXVFSkI2aTQyN25jaTJNa0FkYVpaMHd3RE84Ui1BZ0NnT2tWZnNQTUhKWVJwQQ%3D%3D
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	explanation application.properties file:
+
 1.	spring.application.name=RBASpringSecurityProject
 o	Purpose: Sets the name of the Spring Boot application. This name can be used in logs, metrics, and monitoring tools to identify the application.
 2.	spring.datasource.url=jdbc:mysql://localhost:3306/management_system
@@ -114,7 +121,6 @@ o	Purpose: Enables SQL logging, so SQL statements executed by Hibernate will be 
 o	Purpose: Specifies the prefix path for view resolution. This tells Spring MVC where to find JSP files. All view names will be prefixed with this path.
 10.	spring.mvc.view.suffix=.jsp
 o	Purpose: Specifies the suffix for view resolution. This tells Spring MVC to look for files with the .jsp extension as view templates.
-
 11.	logging.level.org.springframework.security=DEBUG
 o	Purpose: Sets the logging level for Spring Security to DEBUG. This will output detailed logs related to Spring Security, which is helpful for troubleshooting security-related issues.
 12.	spring.main.allow-circular-references=true
