@@ -2,7 +2,6 @@
 
 1. Authentication and Authorization
 
-   
 1.	User Entity and Repository
 o	Entity: User
 	Fields: id, username, password, role
