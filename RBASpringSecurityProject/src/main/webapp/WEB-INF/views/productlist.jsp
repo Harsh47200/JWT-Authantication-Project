@@ -197,7 +197,7 @@ function pageloaded()
 }
 function getAllProducts() {
 	let httpRequest = new XMLHttpRequest();
-	httpRequest.open("GET","http://localhost:8080/allProducts",true);
+	httpRequest.open("GET","http://localhost:8081/allProducts",true);
 	httpRequest.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem("jwtToken"));
 	httpRequest.send();
 	httpRequest.onload=function()
@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function() {
         confirmDeleteButton.addEventListener('click', function() {
             if (productIdToDelete !== null) {
                 var httpRequests = new XMLHttpRequest();
-                var url = "http://localhost:8080/products/" + productIdToDelete;
+                var url = "http://localhost:8081/products/" + productIdToDelete;
 
                 httpRequests.open("DELETE", url, true);
                 httpRequests.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem("jwtToken"));
@@ -395,7 +395,7 @@ function addProduct(event)
 	    var token = localStorage.getItem('jwtToken'); 
 
 	    var xhr = new XMLHttpRequest();
-	    xhr.open('POST', 'http://localhost:8080/products', true);
+	    xhr.open('POST', 'http://localhost:8081/products', true);
 	    xhr.setRequestHeader('Content-Type', 'application/json');
 	    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
 
