@@ -202,7 +202,10 @@
 	<!--CSS End-->
 </head>
 <script type="text/javascript">
-	      
+	      function pageloaded()
+	{
+		getAllProducts();	
+	}
 
 let currentPage = 0;  // Global variable to track the current page
 const pageSize = 10;  // Number of records per page
