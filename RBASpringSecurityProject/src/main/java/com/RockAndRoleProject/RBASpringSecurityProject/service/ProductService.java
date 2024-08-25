@@ -1,6 +1,6 @@
 package com.RockAndRoleProject.RBASpringSecurityProject.service;
 
-import java.util.List;
+
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,9 +14,8 @@ public interface ProductService {
 	// insert product 
 	public Product addItemSave(Product product);
 	
-	// list product
-//	public List<Product> getAllItems();
-	
+
+	// list and pagination
 	public Page<Product> getAllItems(Pageable pageable);
 	
 	//delete product
