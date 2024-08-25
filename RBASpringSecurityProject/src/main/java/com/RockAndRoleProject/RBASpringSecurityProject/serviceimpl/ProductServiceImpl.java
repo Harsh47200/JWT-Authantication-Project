@@ -1,9 +1,10 @@
 package com.RockAndRoleProject.RBASpringSecurityProject.serviceimpl;
 
-import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -26,14 +27,6 @@ public class ProductServiceImpl implements ProductService {
 		return productRepository.save(product);
 	}
 
-	/*
-	 * // list show product method
-	 * 
-	 * @Override public List<Product> getAllItems() { // TODO Auto-generated method
-	 * stub return productRepository.findAll(); }
-	 */
-	
-
 	// delete product by id
 	@Override
 	public String deleteItemById(long productId) {
@@ -49,11 +42,12 @@ public class ProductServiceImpl implements ProductService {
 		// TODO Auto-generated method stub
 		return productRepository.findById(productId).get();
 	}
-
+	
+	// list and pagination also
 	@Override
-	public  Page<Product> getAllItems(Pageable pageable) {
-		// TODO Auto-generated method stub
-		return productRepository.findAll(pageable);
+	public Page<Product> getAllItems(Pageable pageable) {
+	  
+	    return productRepository.findAll(pageable);
 	}
 
 }
