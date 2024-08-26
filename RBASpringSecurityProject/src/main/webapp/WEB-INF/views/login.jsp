@@ -402,6 +402,92 @@ input.checkbox:checked:after {
         transform: translateY(-1000px) scale(0);
     }
 }
+/* Header */
+.custom-header {
+    background-color: #000; /* Black background */
+    padding: 15px 20px;
+    color: white;
+    animation: headerAnimation 2s ease-in-out infinite; /* Add animation */
+}
+
+/* Navbar Brand */
+.custom-header .navbar-brand {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* Navbar Links */
+.custom-header .nav-link {
+    color: white;
+    margin-right: 20px;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.custom-header .nav-link:hover {
+    color: #FFCC70; /* Color on hover */
+}
+
+.custom-header .nav-link.active {
+    font-weight: bold;
+    color: #C850C0; /* Active link color */
+}
+
+/* Navbar Toggler */
+.custom-header .navbar-toggler {
+    border: none;
+    color: white;
+}
+
+.custom-header .navbar-toggler:focus {
+    box-shadow: none;
+}
+
+/* Navbar Collapse Animation */
+@keyframes headerAnimation {
+    0% {
+        background-color: #000; /* Black background */
+    }
+    50% {
+        background-color: #333; /* Slightly lighter black */
+    }
+    100% {
+        background-color: #000; /* Black background */
+    }
+}
+/* Footer */
+.custom-footer {
+    background-color: #000; /* Black background */
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    animation: footerAnimation 2s ease-in-out infinite; /* Add animation */
+}
+
+/* Footer Links and Text */
+.custom-footer a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.custom-footer a:hover {
+    color: #FFCC70; /* Color on hover */
+}
+
+/* Footer Animation */
+@keyframes footerAnimation {
+    0% {
+        background-color: #000; /* Black background */
+    }
+    50% {
+        background-color: #333; /* Slightly lighter black */
+    }
+    100% {
+        background-color: #000; /* Black background */
+    }
+}
+
 
 </style>
 <%@ include file="./header.jsp"%>
@@ -446,6 +532,30 @@ input.checkbox:checked:after {
 </script>
 </head>
 <body>
+<header class="custom-header">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fa fa-leaf"></i> PRODUCT MANAGEMENT
+            </a>
+            <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"><i class="fa fa-bars"></i></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
 	<!-- main -->
 	<div class="main-w3layouts wrapper">
 		<h1>LOGIN</h1>
@@ -495,5 +605,13 @@ input.checkbox:checked:after {
 		</ul>
 	</div>
 	<!-- //main -->
+	<footer class="custom-footer">
+    <p>&copy; 2024 Your Company. All rights reserved.</p>
+    <p>
+        <a href="#">Privacy Policy</a> | 
+        <a href="#">Terms of Service</a>
+    </p>
+</footer>
+
 </body>
 </html>
