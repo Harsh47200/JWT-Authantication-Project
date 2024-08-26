@@ -286,21 +286,21 @@
         <div class="title">
             Register
         </div>
-        <form action="${pageContext.request.contextPath}/register" method="post">
+        <form action="${pageContext.request.contextPath}/registerUser" method="post">
             <div class="field">
-                <input type="text" name="username" required>
+                 <input type="text" name="userName" class="form-control" id="userNameID" value="${user.userName }" aria-describedby="usernameHelp">
                 <label>Username</label>
             </div>
             <div class="field">
-                <input type="password" name="password" required>
+                <input type="password" name="password" class="form-control" id="passwordID" value="${user.password }">
                 <label>Password</label>
             </div>
             <div class="field">
                 <div class="custom-select">
-                    <select name="role" required>
-                        <option value="" disabled selected>Choose your role</option>
-                        <option value="USER">User</option>
-                        <option value="ADMIN">Admin</option>
+                     <select name="role" required>
+                        <option ${user.role == 'Select' ? 'selected':'' }>Select</option>
+                        <option value="ADMIN" ${user.role == 'ADMIN' ? 'selected':'' }>ADMIN</option>
+                        <option value="USER" ${user.role == 'USER' ? 'selected':'' }>USER</option>
                     </select>
                     <label>Role</label>
                 </div>
