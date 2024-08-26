@@ -273,24 +273,31 @@ body {
     box-shadow: none;
 }
 
-/* Footer */
+/* Footer styling */
 .custom-footer {
-    background-color: #000; /* Black background */
-    color: white;
-    padding: 15px 20px;
-    text-align: center;
-    animation: footerAnimation 2s ease-in-out infinite; /* Add animation */
+    position: fixed; /* Fixes the footer to the bottom of the viewport */
+    bottom: 0; /* Aligns it to the bottom */
+    left: 0; /* Aligns it to the left */
+    width: 100%; /* Makes the footer span the full width */
+    background-color: #343a40; /* Dark background color */
+    color: #ffffff; /* White text color */
+    padding: 10px 20px; /* Padding for spacing */
+    text-align: center; /* Center-aligns the text */
+    border-top: 1px solid #dee2e6; /* Light border on top */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    z-index: 1000; /* Ensures it stays above other content */
 }
 
+/* Footer links styling */
 .custom-footer a {
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s;
+    color: #ffffff; /* White color for links */
+    text-decoration: none; /* Removes underline from links */
 }
 
 .custom-footer a:hover {
-    color: #FFCC70; /* Color on hover */
+    text-decoration: underline; /* Underline links on hover */
 }
+
 
 /* Header Animation */
 @keyframes headerAnimation {
@@ -834,6 +841,7 @@ body {
 			</div>
 		</div>
 	</div>
+	
 	<!-- Footer Start -->
 <footer class="custom-footer">
     <p>&copy; 2024 Your Company. All rights reserved.</p>
