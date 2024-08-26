@@ -8,15 +8,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${pageHeading}</title>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-	crossorigin="anonymous">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-	integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-	crossorigin="anonymous" referrerpolicy="no-referrer">
+
 
 <!--CSS Start-->
 <style>
@@ -243,6 +235,89 @@ body {
     background-color: #007bff;
     color: white;
 }
+/* Header */
+.custom-header {
+    background: linear-gradient(135deg, #4158D0, #C850C0, #FFCC70);
+    padding: 15px 20px;
+    color: white;
+    animation: headerAnimation 2s ease-in-out infinite; /* Add animation */
+}
+
+.custom-header .navbar-brand {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.custom-header .nav-link {
+    color: white;
+    margin-right: 20px;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.custom-header .nav-link:hover {
+    color: #FFCC70;
+}
+
+.custom-header .nav-link.active {
+    font-weight: bold;
+    color: #C850C0;
+}
+
+.custom-header .navbar-toggler {
+    border: none;
+    color: white;
+}
+
+.custom-header .navbar-toggler:focus {
+    box-shadow: none;
+}
+
+/* Footer */
+.custom-footer {
+    background-color: #000; /* Black background */
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    animation: footerAnimation 2s ease-in-out infinite; /* Add animation */
+}
+
+.custom-footer a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.custom-footer a:hover {
+    color: #FFCC70; /* Color on hover */
+}
+
+/* Header Animation */
+@keyframes headerAnimation {
+    0% {
+        background: linear-gradient(135deg, #4158D0, #C850C0, #FFCC70);
+    }
+    50% {
+        background: linear-gradient(135deg, #C850C0, #FFCC70, #4158D0); /* Swap colors for effect */
+    }
+    100% {
+        background: linear-gradient(135deg, #4158D0, #C850C0, #FFCC70);
+    }
+}
+
+/* Footer Animation */
+@keyframes footerAnimation {
+    0% {
+        background-color: #000; /* Black background */
+    }
+    50% {
+        background-color: #333; /* Slightly lighter black */
+    }
+    100% {
+        background-color: #000; /* Black background */
+    }
+}
+
 </style>
 <!--CSS End-->
 </head>
@@ -759,5 +834,15 @@ body {
 			</div>
 		</div>
 	</div>
+	<!-- Footer Start -->
+<footer class="custom-footer">
+    <p>&copy; 2024 Your Company. All rights reserved.</p>
+    <p>
+        <a href="#">Privacy Policy</a> | 
+        <a href="#">Terms of Service</a>
+    </p>
+</footer>
+<!-- Footer End -->
+	
 </body>
 </html>
