@@ -20,258 +20,228 @@
 
 <!--CSS Start-->
 <style>
+/* Global Styles */
 body {
-	font-family: 'Poppins', sans-serif;
-	background-color: #f0f0f0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0f0f0;
 }
 
+/* Header */
 .custom-header {
-	background: linear-gradient(135deg, #4158D0, #C850C0, #FFCC70);
-	padding: 15px 20px;
-	color: white;
+    background: linear-gradient(135deg, #4158D0, #C850C0, #FFCC70);
+    padding: 15px 20px;
+    color: white;
 }
 
 .custom-header .navbar-brand {
-	font-size: 28px;
-	font-weight: bold;
+    font-size: 28px;
+    font-weight: bold;
 }
 
 .custom-header .nav-link {
-	color: white;
-	margin-right: 20px;
-	font-size: 16px;
-	transition: color 0.3s;
+    color: white;
+    margin-right: 20px;
+    font-size: 16px;
+    transition: color 0.3s;
 }
 
 .custom-header .nav-link:hover {
-	color: #FFCC70;
+    color: #FFCC70;
 }
 
 .custom-header .nav-link.active {
-	font-weight: bold;
-	color: #C850C0;
+    font-weight: bold;
+    color: #C850C0;
 }
 
 .custom-header .navbar-toggler {
-	border: none;
-	color: white;
+    border: none;
+    color: white;
 }
 
 .custom-header .navbar-toggler:focus {
-	box-shadow: none;
+    box-shadow: none;
 }
 
+/* Floating Elements */
 .float-start, .float-end {
-	font-size: 16px;
+    font-size: 16px;
 }
 
 .float-end a {
-	color: #FFCC70;
-	text-decoration: none;
+    color: #FFCC70;
+    text-decoration: none;
 }
 
 .float-end a:hover {
-	color: #C850C0;
+    color: #C850C0;
 }
 
+/* Button Styles */
 .btn-success {
-	background-color: #28a745;
-	border: none;
-	margin-left: 852px;
-	height: 39px;
-	width: 113px;
-	z-index: 1000; /* Ensure the button is above other content */
+    background-color: #28a745;
+    border: none;
+    margin-left: 852px;
+    height: 39px;
+    width: 113px;
+    z-index: 1000; /* Ensure the button is above other content */
 }
 
 .btn-success:hover {
-	background-color: #218838;
+    background-color: #218838;
 }
 
+/* Modal Styles */
 .modal-header {
-	background-color: #f8f9fa;
-}
-
-.modal-body {
-	background-color: #fff;
-}
-
-.modal-footer {
-	background-color: #f8f9fa;
-}
-
-.alert {
-	margin-bottom: 0;
-}
-
-.table th, .table td {
-	text-align: center;
-}
-
-.table-dark th, .table-dark td {
-	color: #fff;
-	background-color: #343a40;
-}
-
-.modal-content {
-	border-radius: 10px;
-	border: 1px solid #dee2e6;
-	box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-}
-
-.modal-header {
-	background-color: #f7f7f7;
-	border-bottom: 1px solid #e5e5e5;
-	border-radius: 10px 10px 0 0;
-	padding: 1.25rem;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #e5e5e5;
+    border-radius: 10px 10px 0 0;
+    padding: 1.25rem;
 }
 
 .modal-title {
-	font-size: 1.25rem;
-	color: #333;
-}
-
-.btn-close {
-	filter: brightness(0.6);
-}
-
-.btn-close:hover {
-	filter: brightness(1);
+    font-size: 1.25rem;
+    color: #333;
 }
 
 .modal-body {
-	padding: 1.5rem;
-	background-color: #ffffff;
-}
-
-.form-control {
-	border-radius: 5px;
-	border: 1px solid #ced4da;
-	box-shadow: none;
-}
-
-.form-control:focus {
-	border-color: #495057;
-	box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.1);
-}
-
-.form-label {
-	font-weight: 500;
-	color: #495057;
-}
-
-.alert-danger {
-	border-radius: 5px;
+    padding: 1.5rem;
+    background-color: #ffffff;
 }
 
 .modal-footer {
-	border-top: 1px solid #e5e5e5;
-	background-color: #f7f7f7;
-	padding: 1rem;
-	border-radius: 0 0 10px 10px;
+    border-top: 1px solid #e5e5e5;
+    background-color: #f7f7f7;
+    padding: 1rem;
+    border-radius: 0 0 10px 10px;
 }
 
-.btn-secondary, .btn-primary {
-	border-radius: 5px;
-	padding: 0.5rem 1rem;
+/* Form Controls */
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    box-shadow: none;
 }
 
-.btn-secondary {
-	background-color: #6c757d;
-	border: none;
+.form-control:focus {
+    border-color: #495057;
+    box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.1);
 }
 
-.btn-secondary:hover {
-	background-color: #5a6268;
-}
-
-.btn-primary {
-	background-color: #007bff;
-	border: none;
-}
-
-.btn-primary:hover {
-	background-color: #0056b3;
+.form-label {
+    font-weight: 500;
+    color: #495057;
 }
 
 .input-group-text {
-	background-color: #f7f7f7;
-	border: 1px solid #ced4da;
-	border-radius: 5px 0 0 5px;
-	padding: 0.375rem 0.75rem;
-	font-size: 1rem;
-	line-height: 1.5;
+    background-color: #f7f7f7;
+    border: 1px solid #ced4da;
+    border-radius: 5px 0 0 5px;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
 }
 
 .input-group .form-control {
-	border-radius: 0 5px 5px 0;
-	border-left: 0;
-	padding-left: 0.75rem;
+    border-radius: 0 5px 5px 0;
+    border-left: 0;
+    padding-left: 0.75rem;
 }
 
 .input-group {
-	width: 100%;
+    width: 100%;
 }
 
+/* Button Styles */
+.btn-secondary, .btn-primary {
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Alert Styles */
+.alert {
+    margin-bottom: 0;
+}
+
+.alert-danger {
+    border-radius: 5px;
+}
+
+/* Table Styles */
+.table th, .table td {
+    text-align: center;
+}
+
+.table-dark th, .table-dark td {
+    color: #fff;
+    background-color: #343a40;
+}
+
+/* Modal Content */
+.modal-content {
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Hover Effects */
+.btn-close {
+    filter: brightness(0.6);
+}
+
+.btn-close:hover {
+    filter: brightness(1);
+}
+
+/* Scrolling Text */
 .scrolling-text {
-	font-size: 2em;
-	font-weight: bold;
-	color: #ff007f; /* Starting color */
-	text-shadow: 2px 2px 4px #000000; /* Shadow effect */
-	animation: rainbow 5s linear infinite;
+    font-size: 2em;
+    font-weight: bold;
+    color: #ff007f; /* Starting color */
+    text-shadow: 2px 2px 4px #000000; /* Shadow effect */
+    animation: rainbow 5s linear infinite;
 }
 
-/* Rainbow color animation */
-@
-keyframes rainbow { 0% {
-	color: #ff007f;
-} /* Pink */
-20
-%
-{
-color
-:
-#ff8c00;
-} /* Orange */
-40
-%
-{
-color
-:
-#ffd700;
-} /* Gold */
-60
-%
-{
-color
-:
-#32cd32;
-} /* Lime Green */
-80
-%
-{
-color
-:
-#1e90ff;
-} /* Dodger Blue */
-100
-%
-{
-color
-:
-#ff007f;
-} /* Back to Pink */
+/* Rainbow Color Animation */
+@keyframes rainbow {
+    0% { color: #ff007f; } /* Pink */
+    20% { color: #ff8c00; } /* Orange */
+    40% { color: #ffd700; } /* Gold */
+    60% { color: #32cd32; } /* Lime Green */
+    80% { color: #1e90ff; } /* Dodger Blue */
+    100% { color: #ff007f; } /* Back to Pink */
 }
+
+/* Custom Button Style */
 .bt {
-	padding: 10px;
-	margin: 5px;
-	border: 1px solid #ccc;
-	background-color: #f8f8f8;
-	cursor: pointer;
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    background-color: #f8f8f8;
+    cursor: pointer;
 }
 
 .btn.active {
-	background-color: #007bff;
-	color: white;
+    background-color: #007bff;
+    color: white;
 }
 </style>
 <!--CSS End-->
