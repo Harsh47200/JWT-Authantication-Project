@@ -255,9 +255,32 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to Our Service</h1>
-    </header>
+    <header class="custom-header">
+		<nav class="navbar navbar-expand-lg">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="#"> <i class="fa fa-leaf"></i>
+					PRODUCT MANAGEMENT
+				</a>
+				<button class="navbar-toggler" type="button"
+					data-bs-toggle="collapse" data-bs-target="#navbarNav"
+					aria-controls="navbarNav" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"><i class="fa fa-bars"></i></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarNav">
+					<ul class="navbar-nav ms-auto">
+						<li class="nav-item"><a class="nav-link active" href="dashboard-page">Home</a>
+						</li>
+						<li class="nav-item"><a class="nav-link" href="#">About</a></li>
+						<li class="nav-item"><a class="nav-link" href="#">Services</a>
+						</li>
+						<li class="nav-item"><a class="nav-link" href="#">Contact</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
     
     <div class="wrapper">
         <div class="title">
