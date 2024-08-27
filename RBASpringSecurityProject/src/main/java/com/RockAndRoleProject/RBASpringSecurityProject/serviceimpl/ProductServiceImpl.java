@@ -4,8 +4,9 @@ package com.RockAndRoleProject.RBASpringSecurityProject.serviceimpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.RockAndRoleProject.RBASpringSecurityProject.pojo.Product;
@@ -45,9 +46,17 @@ public class ProductServiceImpl implements ProductService {
 	
 	// list and pagination also
 	@Override
-	public Page<Product> getAllItems(Pageable pageable) {
-	  
-	    return productRepository.findAll(pageable);
+	public Page<Product> getAllItems(Pageable pageable, String sortBy) {
+	    // Modify the Pageable object to include sorting based on the sortBy parameter
+	    Pageable sortedPageable = PageRequest.of(
+	        pageable.getPageNumber(), 
+	        pageable.getPageSize(), 
+	        Sort.by(sortBy).ascending() // You can change to descending() if needed
+	    );
+
+	    // Fetch the paginated and sorted list of products from the repository
+	    return productRepository.findAll(sortedPageable);
 	}
+
 
 }
