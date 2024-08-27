@@ -15,8 +15,8 @@ public interface ProductService {
 	public Product addItemSave(Product product);
 	
 
-	// list and pagination
-	public Page<Product> getAllItems(Pageable pageable);
+	// list and pagination, sorteBy name and description
+	public Page<Product> getAllItems(Pageable pageable, String sortBy);
 	
 	//delete product
 	public String deleteItemById(long productId);
