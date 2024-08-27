@@ -461,10 +461,14 @@ input.checkbox:checked:after {
     color: white;
     padding: 15px 20px;
     text-align: center;
+    position: fixed; /* Fix the footer to the bottom */
+    bottom: 0; /* Align it to the bottom */
+    left: 0;
+    width: 100%; /* Full width */
     animation: footerAnimation 2s ease-in-out infinite; /* Add animation */
 }
 
-/* Footer Links and Text */
+/* Footer links */
 .custom-footer a {
     color: white;
     text-decoration: none;
