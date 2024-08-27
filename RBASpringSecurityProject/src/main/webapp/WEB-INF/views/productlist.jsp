@@ -273,31 +273,29 @@ body {
     box-shadow: none;
 }
 
-/* Footer styling */
+/* Footer */
 .custom-footer {
-    position: fixed; /* Fixes the footer to the bottom of the viewport */
-    bottom: 0; /* Aligns it to the bottom */
-    left: 0; /* Aligns it to the left */
-    width: 100%; /* Makes the footer span the full width */
-    background-color: #343a40; /* Dark background color */
-    color: #ffffff; /* White text color */
-    padding: 10px 20px; /* Padding for spacing */
-    text-align: center; /* Center-aligns the text */
-    border-top: 1px solid #dee2e6; /* Light border on top */
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Shadow effect */
-    z-index: 1000; /* Ensures it stays above other content */
+    background-color: #000; /* Black background */
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    position: fixed; /* Fix the footer to the bottom */
+    bottom: 0; /* Align it to the bottom */
+    left: 0;
+    width: 100%; /* Full width */
+    animation: footerAnimation 2s ease-in-out infinite; /* Add animation */
 }
 
-/* Footer links styling */
+/* Footer links */
 .custom-footer a {
-    color: #ffffff; /* White color for links */
-    text-decoration: none; /* Removes underline from links */
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
 }
 
 .custom-footer a:hover {
-    text-decoration: underline; /* Underline links on hover */
+    color: #FFCC70; /* Color on hover */
 }
-
 
 /* Header Animation */
 @keyframes headerAnimation {
@@ -330,365 +328,357 @@ body {
 </head>
 <script type="text/javascript">
 
-//pagination and list product work start
+let currentPage = 0;  // Global variable to track the current page
+const pageSize = 10;  // Number of records per page
+let currentSortBy = 'name'; // Initialize the sorting by the 'name' column.
+let currentSortOrder = 'asc'; // Initial sort order is ascending.
 
-	let currentPage = 0;  // Global variable to track the current page
-	const pageSize = 10;  // Number of records per page
+function pageloaded() {
+    getAllProducts(currentPage, currentSortBy);    
+}
 
-	function pageloaded()
-	{
-		getAllProducts(currentPage);	
-	}
+document.addEventListener('DOMContentLoaded', () => {
+    getAllProducts(currentPage, currentSortBy, currentSortOrder); // Load products when the page is loaded
+});
 
-	document.addEventListener('DOMContentLoaded', () => {
-	    getAllProducts(currentPage); // Load products when the page is loaded
-	});
+function getAllProducts(page, currentSortBy, currentSortOrder) {
+    // Construct the URL with pagination and sorting parameters
+    const url = 'http://localhost:8081/allProducts?page=' + page + '&size=' + pageSize + '&sortBy=' + currentSortBy + '&sortorder=' + currentSortOrder;
+    const token = localStorage.getItem("jwtToken"); // Get JWT token from local storage
 
-	function getAllProducts(page) {
-	const url = 'http://localhost:8081/allProducts?page='+page+'&size='+pageSize;	
-	    const token = localStorage.getItem("jwtToken");
+    console.log('Fetching URL:', url); // Log the URL being fetched
 
-	    console.log('Fetching URL:', url);
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + token, // Set authorization header with JWT token
+            'Content-Type': 'application/json'
+        },
+        cache: 'no-store' // Disable caching
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => {
+                throw new Error(`Error fetching products: ${err.message || response.statusText}`);
+            });
+        }
+        return response.json(); // Parse JSON response
+    })
+    .then(data => {
+        console.log('Data received for page', page, ':', data); // Log the data received
+        if (data.content && data.content.length > 0) {
+            displayProducts(data.content); // Display the products
+        } else {
+            displayNoProductsFound(); // Show message if no products are found
+        }
+        updatePagination(data.currentPage || page, data.totalPages || 1); // Update pagination controls
+    })
+    .catch(error => {
+        console.error('Error fetching products:', error); // Log any errors
+    });
+}
 
-	    fetch(url, {
-	        method: 'GET',
-	        headers: {
-	            'Authorization': 'Bearer ' + token,
-	            'Content-Type': 'application/json'
-	        },
-	        cache: 'no-store'
-	    })
-	    .then(response => {
-	        if (!response.ok) {
-	            throw new Error(`HTTP error! status: ${response.status}`);
-	        }
-	        return response.json();
-	    })
-	    .then(data => {
-	        console.log('Data received for page', page, ':', data);
+function sortTable(sortBy) {
+    // Toggle sort order if the same column is clicked, otherwise reset to ascending
+    if (currentSortBy === sortBy) {
+        currentSortOrder = (currentSortOrder === 'asc') ? 'desc' : 'asc';
+    } else {
+        currentSortBy = sortBy;
+        currentSortOrder = 'asc';
+    }
 
-	        if (data.content && data.content.length > 0) {
-	            displayProducts(data.content);
-	        } else {
-	            displayNoProductsFound();
-	        }
+    getAllProducts(0, currentSortBy, currentSortOrder); // Reload products with the new sort order
+}
 
-	        updatePagination(data.currentPage || page, data.totalPages || 1);
-	    })
-	    .catch(error => {
-	        console.error('Error fetching products:', error);
-	    });
-	}
+function updatePagination(currentPage, totalPages) {
+    console.log("Updating pagination - Current Page:", currentPage, "Total Pages:", totalPages);
 
+    let paginationControls = document.getElementById('paginationControls'); // Get the pagination controls element
+    paginationControls.innerHTML = ''; // Clear existing pagination controls
 
-	function updatePagination(currentPage, totalPages) {
-	    console.log("Updating pagination - Current Page:", currentPage, "Total Pages:", totalPages);
+    if (currentPage > 0) {
+        let prevButton = document.createElement('button');
+        prevButton.innerText = 'Previous'; // Set button text
+        prevButton.classList.add('btn'); // Add button class
+        prevButton.onclick = () => {
+            currentPage--;
+            getAllProducts(currentPage, currentSortBy, currentSortOrder); // Fetch previous page
+        };
+        paginationControls.appendChild(prevButton); // Add button to pagination controls
+    }
 
-	    let paginationControls = document.getElementById('paginationControls');
-	    paginationControls.innerHTML = '';
+    for (let i = 0; i < totalPages; i++) {
+        let pageButton = document.createElement('button');
+        pageButton.innerText = i + 1; // Set button text to page number
+        pageButton.classList.add('btn', 'page-btn'); // Add button classes
+        if (i === currentPage) {
+            pageButton.classList.add('active'); // Highlight active page
+        }
+        pageButton.onclick = () => {
+            currentPage = i;
+            getAllProducts(currentPage, currentSortBy, currentSortOrder); // Fetch selected page
+        };
+        paginationControls.appendChild(pageButton); // Add button to pagination controls
+    }
 
-	    if (currentPage > 0) {
-	        let prevButton = document.createElement('button');
-	        prevButton.innerText = 'Previous';
-	        prevButton.classList.add('btn');
-	        prevButton.onclick = () => {
-	            currentPage--;
-	            getAllProducts(currentPage);
-	        };
-	        paginationControls.appendChild(prevButton);
-	    }
+    if (currentPage < totalPages - 1) {
+        let nextButton = document.createElement('button');
+        nextButton.innerText = 'Next'; // Set button text
+        nextButton.classList.add('btn'); // Add button class
+        nextButton.onclick = () => {
+            currentPage++;
+            getAllProducts(currentPage, currentSortBy, currentSortOrder); // Fetch next page
+        };
+        paginationControls.appendChild(nextButton); // Add button to pagination controls
+    }
+}
 
-	    for (let i = 0; i < totalPages; i++) {
-	        let pageButton = document.createElement('button');
-	        pageButton.innerText = i + 1;
-	        pageButton.classList.add('btn', 'page-btn');
-	        if (i === currentPage) {
-	            pageButton.classList.add('active');
-	        }
-	        pageButton.onclick = () => {
-	            currentPage = i;
-	            getAllProducts(currentPage);
-	        };
-	        paginationControls.appendChild(pageButton);
-	    }
+function displayProducts(products) {
+    let productTable = document.getElementById('productTable'); // Get the product table element
+    productTable.innerHTML = ''; // Clear existing table content
 
-	    if (currentPage < totalPages - 1) {
-	        let nextButton = document.createElement('button');
-	        nextButton.innerText = 'Next';
-	        nextButton.classList.add('btn');
-	        nextButton.onclick = () => {
-	            currentPage++;
-	            getAllProducts(currentPage);
-	        };
-	        paginationControls.appendChild(nextButton);
-	    }
-	}
+    products.forEach(product => {
+        let row = productTable.insertRow(); // Insert a new row into the table
 
-	function displayProducts(products) {
-	    let productTable = document.getElementById('productTable');
-	    productTable.innerHTML = ''; 
+        // Product ID
+        row.insertCell(0).innerText = product.productId; // Set ID in the first cell
 
-	    products.forEach(product => {
-	        let row = productTable.insertRow();
+        // Product Name with three-dot ellipsis and tooltip
+        let nameCell = row.insertCell(1);
+        nameCell.innerText = product.name;
+        nameCell.style.whiteSpace = 'nowrap';
+        nameCell.style.overflow = 'hidden';
+        nameCell.style.textOverflow = 'ellipsis';
+        nameCell.style.wordBreak = 'break-all'; // Handle long words
+        nameCell.style.maxWidth = '150px'; // Set a maximum width
+        nameCell.title = product.name; // Tooltip for product name
 
-	        // Product ID
-	        row.insertCell(0).innerText = product.productId;
+        // Product Description with three-dot ellipsis and tooltip
+        let descCell = row.insertCell(2);
+        descCell.innerText = product.description;
+        descCell.style.whiteSpace = 'nowrap';
+        descCell.style.overflow = 'hidden';
+        descCell.style.textOverflow = 'ellipsis';
+        descCell.style.wordBreak = 'break-all'; // Handle long words
+        descCell.style.maxWidth = '300px'; // Set a maximum width
+        descCell.title = product.description; // Tooltip for product description
 
-	     // Product Name with three-dot ellipsis and tooltip
-	        let nameCell = row.insertCell(1);
-	        nameCell.innerText = product.name;
-	        nameCell.style.whiteSpace = 'nowrap';
-	        nameCell.style.overflow = 'hidden';
-	        nameCell.style.textOverflow = 'ellipsis';
-	        nameCell.style.wordBreak = 'break-all'; // Handle long words
-	        nameCell.style.maxWidth = '150px'; // Set a maximum width
-	        nameCell.title = product.name; // Tooltip
+        // Product Price
+        let priceValue = parseFloat(product.price);
+        if (!isNaN(priceValue)) {
+            let formattedPrice = priceValue.toLocaleString('en-IN'); // Format price
+            row.insertCell(3).innerHTML = '₹ ' + formattedPrice; // Set price in the fourth cell
+        } else {
+            row.insertCell(3).innerText = 'Invalid Price'; // Show error if price is invalid
+        }
 
-	        // Product Description with three-dot ellipsis and tooltip
-	        let descCell = row.insertCell(2);
-	        descCell.innerText = product.description;
-	        descCell.style.whiteSpace = 'nowrap';
-	        descCell.style.overflow = 'hidden';
-	        descCell.style.textOverflow = 'ellipsis';
-	        descCell.style.wordBreak = 'break-all'; // Handle long words
-	        descCell.style.maxWidth = '300px'; // Set a maximum width
-	        descCell.title = product.description; // Tooltip
+        // Actions (Edit & Delete)
+        row.insertCell(4).innerHTML = 
+            '<a href="#" onClick="confirmDeleteProduct(' + product.productId + '); return false;" title="Delete Product">' +
+            '<i class="fa fa-trash-alt"></i></a> &nbsp; ' +  
+            '<a href="#" onClick="editProduct(\'' + product.productId + '\', \'' + escapeQuotes(product.name) + '\', \'' + escapeQuotes(product.description) + '\', ' + product.price + '); return false;" class="ml-10" title="Edit Product">' +
+            '<i class="fa fa-edit"></i></a>'; // Add edit and delete actions
+    });
+}
 
+function displayNoProductsFound() {
+    let productTable = document.getElementById('productTable'); // Get the product table element
+    productTable.innerHTML = ''; // Clear existing table content
+    let row = productTable.insertRow(); // Insert a new row into the table
+    let cell = row.insertCell(0);
+    cell.colSpan = 5; // Span across all columns
+    cell.style.textAlign = 'center'; // Center align the text
+    cell.innerText = "No Record Found"; // Display no records message
+}
 
-	        // Product Price
-	        let priceValue = parseFloat(product.price);
-	        if (!isNaN(priceValue)) {
-	            let formattedPrice = priceValue.toLocaleString('en-IN');
-	            row.insertCell(3).innerHTML = '₹ ' + formattedPrice;
-	        } else {
-	            row.insertCell(3).innerText = 'Invalid Price';
-	        }
+function escapeQuotes(str) {
+    return str.replace(/'/g, "\\'"); // Escape single quotes
+}
 
-	        // Actions (Edit & Delete)
-	        row.insertCell(4).innerHTML = 
-	            '<a href="#" onClick="confirmDeleteProduct(' + product.productId + '); return false;" title="Delete Product">' +
-	            '<i class="fa fa-trash-alt"></i></a> &nbsp; ' +  
-	            '<a href="#" onClick="editProduct(\'' + product.productId + '\', \'' + escapeQuotes(product.name) + '\', \'' + escapeQuotes(product.description) + '\', ' + product.price + '); return false;" class="ml-10" title="Edit Product">' +
-	            '<i class="fa fa-edit"></i></a>'; 
-	    });
-	}
+// pagination and list product work start
+// delete product work start
 
+var productIdToDelete = null; // Variable to store the product ID to delete
 
+function confirmDeleteProduct(productId) {
+    productIdToDelete = productId; // Store the product ID to delete
+    var myModal = new bootstrap.Modal(document.getElementById('deleteProductModal'));
+    myModal.show(); // Show the confirmation modal
+}
 
-	function displayNoProductsFound() {
-	    let productTable = document.getElementById('productTable');
-	    productTable.innerHTML = ''; 
-	    let row = productTable.insertRow();
-	    let cell = row.insertCell(0);
-	    cell.colSpan = 5;
-	    cell.style.textAlign = 'center';
-	    cell.innerText = "No Record Found";
-	}
+function deleteProduct() {
+    if (productIdToDelete !== null) {
+        fetch('http://localhost:8081/products/' + productIdToDelete, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("jwtToken") // Set authorization header with JWT token
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(text); // Handle text response
+                });
+            }
+            return response.text(); // Return text response if status is OK
+        })
+        .then(message => {
+            console.log('Product deleted successfully:', message); // Log success message
+            getAllProducts(currentPage, currentSortBy, currentSortOrder); // Refresh the product list
+            var myModal = bootstrap.Modal.getInstance(document.getElementById('deleteProductModal'));
+            myModal.hide(); // Hide the confirmation modal
+        })
+        .catch(error => {
+            console.error('Error deleting product:', error); // Log errors
+            document.getElementById('deleteText').innerText = error.message; // Display error message
+        });
 
+        productIdToDelete = null; // Reset the product ID to delete
+    } else {
+        console.warn('No product selected for deletion'); // Log warning if no product is selected
+    }
+}
 
+//Event listener for the delete confirmation button
+document.addEventListener('DOMContentLoaded', function() {
+    // Wait for the DOM to fully load
+    var confirmDeleteButton = document.getElementById('confirmDeleteButton');
+    // Get the confirm delete button element by its ID
+    if (confirmDeleteButton) {
+        // If the button exists, add a click event listener that calls the deleteProduct function
+        confirmDeleteButton.addEventListener('click', deleteProduct);
+    } else {
+        // Log an error if the confirm delete button is not found
+        console.error('Confirm Delete Button not found');
+    }
+});
 
-	function escapeQuotes(str) {
-	    return str.replace(/'/g, "\\'");
-	}
-	
-	//pagination and list product work start
-	
-	//delete product work start
-	// Variable to store the product ID to delete
-	var productIdToDelete = null;
+// Function to open the add product modal
+function openAddProductModal() {
+    resetProductForm();  // Reset the form fields to clear any previous data
+    var myModal = new bootstrap.Modal(document.getElementById('addProductModal'));  // Create a new Bootstrap modal instance
+    myModal.show();  // Show the add product modal
+}
 
-	// Function to show the confirmation modal
-	function confirmDeleteProduct(productId) {
-	    productIdToDelete = productId; // Store the product ID to delete
-	    var myModal = new bootstrap.Modal(document.getElementById('deleteProductModal'));
-	    myModal.show(); // Show the confirmation modal
-	}
+// Function to set up the edit product modal
+var gproductId = 0; // Global variable to hold the product ID for editing
+function editProduct(productId, name, description, price) {
+    // Fetch the products to ensure the list is up-to-date
+    getAllProducts(currentPage, currentSortBy, currentSortOrder);
+    
+    gproductId = productId; // Set the global product ID for editing
+    var myModal = new bootstrap.Modal(document.getElementById('addProductModal')); // Create a new Bootstrap modal instance
+    myModal.show(); // Show the add product modal
+    // Fill the form fields with the existing product data for editing
+    document.getElementById('productName').value = name;
+    document.getElementById('productPrice').value = price;
+    document.getElementById('productDescription').value = description;
+    // Update the modal title and button text for editing
+    document.getElementById('addProductModalLabel').innerHTML = "Edit Product";
+    document.getElementById('addProductModalButton').innerHTML = "Update Product";
+}
 
-	// Function to delete the product
-	function deleteProduct() {
-	    if (productIdToDelete !== null) {
-	        fetch(`http://localhost:8081/products/`+productIdToDelete, {
-	            method: 'DELETE',
-	            headers: {
-	                'Authorization': 'Bearer ' + localStorage.getItem("jwtToken")
-	            }
-	        })
-	        .then(response => {
-	            if (!response.ok) {
-	                return response.text().then(text => {
-	                    throw new Error(text); // Handle text response
-	                });
-	            }
-	            return response.text(); // Return text response if status is OK
-	        })
-	        .then(message => {
-	            console.log('Product deleted successfully:', message);
-	            getAllProducts(currentPage); // Refresh the product list
-	            var myModal = bootstrap.Modal.getInstance(document.getElementById('deleteProductModal'));
-	            myModal.hide(); // Hide the confirmation modal
-	        })
-	        .catch(error => {
-	            console.error('Error deleting product:', error);
-	            document.getElementById('deleteText').innerText = error.message;
-	        });
+// Function to validate the form fields
+function validateForm() {
+    var errorMessages = ''; // Initialize a string to collect error messages
+    var productName = document.getElementById('productName').value; // Get the product name input value
+    var productPrice = document.getElementById('productPrice').value; // Get the product price input value
+    var productDescription = document.getElementById('productDescription').value; // Get the product description input value
 
-	        productIdToDelete = null; // Reset the product ID to delete
-	    } else {
-	        console.warn('No product selected for deletion');
-	    }
-	}
+    // Check if the product name is empty
+    if (!productName.trim()) {
+        errorMessages += '<li>Product name is required.</li>'; // Add an error message if name is missing
+    }
+    // Check if the product price is empty
+    if (!productPrice.trim()) {
+        errorMessages += '<li>Product price is required.</li>'; // Add an error message if price is missing
+    } 
+    // Check if the product price is a valid number
+    if (isNaN(productPrice)) {
+        errorMessages += '<li>Product price must be a positive number.</li>'; // Add an error message if price is not a number
+    }
+    // Check if the product description is empty
+    if (!productDescription.trim()) {
+        errorMessages += '<li>Product description is required.</li>'; // Add an error message if description is missing
+    }
 
+    return errorMessages || null; // Return the error messages or null if there are no errors
+}
 
-	// Event listener for the delete confirmation button
-	document.addEventListener('DOMContentLoaded', function() {
-	    var confirmDeleteButton = document.getElementById('confirmDeleteButton');
-	    if (confirmDeleteButton) {
-	        confirmDeleteButton.addEventListener('click', deleteProduct);
-	    } else {
-	        console.error('Confirm Delete Button not found');
-	    }
-	});
+// Function to reset the product form fields
+function resetProductForm() {
+    document.getElementById('errorBoxID').style.display = "none"; // Hide the error box
+    document.getElementById('addProductErrorMessage').innerHTML = ""; // Clear the error messages
+    document.getElementById('addProductModalLabel').innerHTML = "Add Product"; // Set the modal title to "Add Product"
+    document.getElementById('addProductModalButton').innerHTML = "Add Product"; // Set the modal button text to "Add Product"
+    // Clear the form fields
+    document.getElementById('productName').value = "";
+    document.getElementById('productPrice').value = "";
+    document.getElementById('productDescription').value = "";
+    gproductId = 0; // Reset the global product ID
+}
 
+// Function to handle adding or updating a product
+function addProduct(event) {
+    event.preventDefault(); // Prevent the default form submission behavior
+    var productId = gproductId; // Get the product ID (0 if adding new product)
+    var errorMessages = validateForm(); // Validate the form fields
+    if (errorMessages) {
+        // If there are validation errors, display them in the error box
+        document.getElementById('errorBoxID').style.display = "block";
+        document.getElementById('addProductErrorMessage').innerHTML = errorMessages;
+        return; // Exit the function if there are errors
+    }
+    // Get the product details from the form fields
+    var productName = document.getElementById('productName').value;
+    var productPrice = document.getElementById('productPrice').value;
+    var productDescription = document.getElementById('productDescription').value;
 
-	//delete product work end
+    var token = localStorage.getItem('jwtToken'); // Get the JWT token from local storage
 
+    var xhr = new XMLHttpRequest(); // Create a new XMLHttpRequest object
+    xhr.open('POST', 'http://localhost:8081/products', true); // Configure the request (POST method to the products endpoint)
+    xhr.setRequestHeader('Content-Type', 'application/json'); // Set the content type of the request
+    xhr.setRequestHeader('Authorization', 'Bearer ' + token); // Set the authorization header with the JWT token
 
-	function openAddProductModal() {
-	    resetProductForm();  // Reset the form fields
-	    var myModal = new bootstrap.Modal(document.getElementById('addProductModal'));  // Create a new Bootstrap modal instance
-	    myModal.show();  // Show the add product modal
-	}
+    xhr.onload = function() {
+        // Function to handle the response from the server
+        if (xhr.status === 200) {
+            // If the request is successful (status code 200)
+            resetProductForm(); // Reset the form fields
+            var myModal = bootstrap.Modal.getInstance(document.getElementById('addProductModal')); // Get the Bootstrap modal instance
+            myModal.hide(); // Hide the modal
+            getAllProducts(currentPage, currentSortBy, currentSortOrder); // Reload the product list
+        } else if (xhr.status == 403) {
+            // If the request fails with status code 403 (Forbidden)
+            document.getElementById('errorBoxID').style.display = "block"; // Show the error box
+            document.getElementById('addProductErrorMessage').innerHTML = "<li>" + xhr.responseText + "</li>"; // Display the error message
+        } else {
+            // For other status codes
+            document.getElementById('errorBoxID').style.display = "block"; // Show the error box
+            document.getElementById('addProductErrorMessage').innerText = '<li>Error: ' + xhr.statusText + "</li>"; // Display the error message
+        }
+    };
 
-
-//edit product work start
-	var gproductId=0;
-	function editProduct(productId,name,description,price)
-	{
-		//const url = 'http://localhost:8081/allProducts?page='+page+'&size='+pageSize;	
-		getAllProducts(currentPage);
-		   gproductId=productId;
-		  
-		   var myModal = new bootstrap.Modal(document.getElementById('addProductModal'));
-		   myModal.show();
-		   document.getElementById('productName').value=name;
-		   document.getElementById('productPrice').value=price;
-		   document.getElementById('productDescription').value=description;
-		   document.getElementById('addProductModalLabel').innerHTML ="Edit Product";
-		   document.getElementById('addProductModalButton').innerHTML = "Update Product";
-	}
-//edit product work end
-	  
-	// validation work start
-	function validateForm() 
-	{
-	    var errorMessages = '';
-	    var productName = document.getElementById('productName').value;
-	    var productPrice = document.getElementById('productPrice').value;
-	    var productDescription = document.getElementById('productDescription').value;
-
-	    if (!productName.trim())
-	    {
-	      	errorMessages += '<li>Product name is required.</li>';
-		}
-	    if (!productPrice.trim())
-	    {
-	    	errorMessages += '<li>Product price is required.</li>';
-	    }	
-	    if (isNaN(productPrice)) 
-	    {
-	      	errorMessages += '<li>Product price must be a positive number.</li>';
-	    }
-
-	    if (!productDescription.trim()) 
-	    {
-	      	errorMessages += '<li>Product description is required.</li>';
-	    }
-
-	   	return errorMessages || null;
-	}
-	// validation work end
-	
-	//reste form work start
-	function resetProductForm()
-	{
-			document.getElementById('errorBoxID').style.display="none";
-		    document.getElementById('addProductErrorMessage').innerHTML = "";
-		    document.getElementById('addProductModalLabel').innerHTML ="Add Product";
-		   	document.getElementById('addProductModalButton').innerHTML = "Add Product";
-		    document.getElementById('productName').value="";
-		    document.getElementById('productPrice').value="";
-		    document.getElementById('productDescription').value="";
-		    gproductId=0;
-	}
-	//reset form work end
-	
-	// Add Product work start
-	function addProduct(event)
-	{
-	        
-		  	event.preventDefault();
-			var productId = gproductId
-			var errorMessages = validateForm();
-		    if (errorMessages) 
-		    {
-		      document.getElementById('errorBoxID').style.display="block";
-		      document.getElementById('addProductErrorMessage').innerHTML = errorMessages;
-		      return;
-		    }
-		    var productName = document.getElementById('productName').value;
-		    var productPrice = document.getElementById('productPrice').value;
-		    var productDescription = document.getElementById('productDescription').value;
-		    
-		    var token = localStorage.getItem('jwtToken'); 
-
-		    var xhr = new XMLHttpRequest();
-		    xhr.open('POST', 'http://localhost:8081/products', true);
-		    xhr.setRequestHeader('Content-Type', 'application/json');
-		    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-
-		    xhr.onload = function() 
-		    {
-		        if (xhr.status === 200) 
-		        {
-		        	resetProductForm();
-			        var myModal = bootstrap.Modal.getInstance(document.getElementById('addProductModal'));
-			        myModal.hide(); 
-			        getAllProducts(currentPage);
-		        }
-		        else if(xhr.status == 403)
-		        {
-					document.getElementById('errorBoxID').style.display="block";
-					document.getElementById('addProductErrorMessage').innerHTML="<li>"+xhr.responseText+"</li>";
-		        }
-		        else 
-		        {
-		        	document.getElementById('errorBoxID').style.display="block";
-		          	document.getElementById('addProductErrorMessage').innerText = '<li>Error: ' + xhr.statusText+"</li>";
-		        }
-		      
-		    };
-
-	        if(productId == 0 || productId == null)
-	        {
-			    var data = JSON.stringify({
-			      name: productName,
-			      price: productPrice,
-			      description: productDescription
-			    });
-			}
-			else
-			{
-				var data = JSON.stringify({
-			      productId : productId,
-			      name: productName,
-			      price: productPrice,
-			      description: productDescription
-			    });
-			
-			}
-		    xhr.send(data);  	
-	}
-	// Add Product work end
+    // Prepare the data to be sent in the request body
+    if (productId == 0 || productId == null) {
+        // If adding a new product
+        var data = JSON.stringify({
+            name: productName,
+            price: productPrice,
+            description: productDescription
+        });
+    } else {
+        // If updating an existing product
+        var data = JSON.stringify({
+            productId: productId,
+            name: productName,
+            price: productPrice,
+            description: productDescription
+        });
+    }
+    xhr.send(data); // Send the request with the data
+}
 
 </script>
 <!--Body Part Start-->
@@ -743,8 +733,8 @@ body {
 				<thead class="table-dark">
 					<tr>
 						<th>ID</th>
-						<th>Name</th>
-						<th>Description</th>
+						<th><a href="#" onclick="sortTable('name')">Name</a></th>
+						<th><a href="#" onclick="sortTable('description')">Description</a></th>
 						<th>Price</th>
 						<th>Action</th>
 					</tr>
@@ -841,7 +831,6 @@ body {
 			</div>
 		</div>
 	</div>
-	
 	<!-- Footer Start -->
 <footer class="custom-footer">
     <p>&copy; 2024 Your Company. All rights reserved.</p>
